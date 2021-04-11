@@ -1,12 +1,33 @@
 {% extends 'base.html' %}
 {% block page_title %} {{ page_title }} {% endblock %}
 {% block content %}
-    {% if object_list %}
-        {% for question in object_list %}
-            <li><a href="/main/{{ question.id }}/">{{ question.subject }}</a> </li>
-        {% endfor %}
-    {% else  %}
-        <p>질문이 없습니다.</p>
-    {% endif %}
-
+    <div class="container my=3">
+    <table class="table">
+        <thead>
+        <tr class="thead-dark">
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if object_list %}
+            {% for question in object_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="{% url 'main:detail' question.id %}">{{ question.subject }}</a>
+                    </td>
+                    <td>{{ question.create_date }}</td>
+                </tr>
+            {% endfor %}
+        {% else  %}
+            <tr>
+                <td colspan="3">질문이 없습니다.</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <a href="{% url 'main:question_create' %}" class="btn btn-primary">질문 등록</a>
+    </div>
 {% endblock %} #}
