@@ -1,9 +1,7 @@
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
 from django.utils import timezone
-
-from .models import *
+from django.core.paginator import Paginator
 from .forms import *
 from django.views.generic import ListView, DetailView, View
 
@@ -29,14 +27,15 @@ from django.views.generic import ListView, DetailView, View
 class index(ListView):
     model = Question
     template_name = 'main/index.html'
+    paginate_by = 10
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(index, self).get_context_data()
         context['page_title'] = '질문과 답변'
         return context
 
     def get_queryset(self):
-        return Question.objects.order_by('-create_date')
+        return self.model.objects.order_by('-create_date')
 
 
 class QuestionDetail(DetailView):
