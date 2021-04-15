@@ -3,6 +3,7 @@
 secrets.json
 my_settings.py
 
+/__pycache__/
 main/migrations/
 main/__pycache__/
 common/migrations/
