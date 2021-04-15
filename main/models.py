@@ -1,9 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Question(models.Model):
     subject = models.CharField(max_length=200)
     content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     create_date = models.DateTimeField()
 
     def __str__(self):
@@ -16,6 +18,7 @@ class Question(models.Model):
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     create_date = models.DateTimeField()
 
     def __str__(self):

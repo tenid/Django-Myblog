@@ -1,2 +1,10 @@
+*.cpython-36.pyc
+
 secrets.json
 my_settings.py
+
+main/migrations/
+main/__pycache__/
+common/migrations/
+common/__pycache__/
+
