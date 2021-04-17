@@ -3,95 +3,109 @@
 {% block page_title %}{{ page_title }} {% endblock %}
 
 {% block content %}
-<div class="container my-3">
-    <!-- 사용자오류 표시 -->
-    {% if messages %}
-    <div class="alert alert-danger my-3" role="alert">
-    {% for message in messages %}
-        <strong>{{ message.tags }}</strong>
-        <ul><li>{{ message.message }}</li></ul>
-    {% endfor %}
-    </div>
-    {% endif %}
-    <!-- 사용자오류 표시 끝 -->
-    <h2 class="border-bottom py-2">{{ question.subject }}</h2>
-    <div class="card my-3">
-        <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
-            <div class="d-flex justify-content-end">
-                <div class="badge badge-light p-2 text-left">
-                    <div class="mb-2"> {{ question.author.username }}</div>
-                    <div>{{ question.create_date }}</div>
-                </div>
-            </div>
-            {% if request.user == question.author %}
-                <div class="my-3">
-                    <!-- 수정 삭제 버튼 -->
-                    <a href="{% url 'main:question_modify' question.id  %}"
-                        class="btn btn-sm btn-outline-primary">수정</a>
-                    <a href="{% url 'main:question_delete' question.id  %}"
-                        class="delete btn btn-sm btn-outline-danger">삭제</a>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-    <!-- 답변 -->
-    <h5 class="border-bottom my-3 py-2">{{question.answer_set.count}}개의 답변이 있습니다.</h5>
-    {% for answer in question.answer_set.all %}
-    <div class="card my-3">
-        <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
-            <div class="d-flex justify-content-end">
-                <div class="badge badge-light p-2 text-left">
-                    <div class="mb-2"> {{ answer.author.username }}</div>
-                    <div>{{ answer.create_date }}</div>
-                </div>
-            </div>
-            <!-- 답변 수정 삭제 -->
-            {% if request.user == answer.author %}
-                <div class="my-2">
-                    <a class="btn btn-sm btn-outline-primary mb-2"
-                        href="{% url 'main:answer_modify' answer.id %}">수정</a>
-                    <a class="btn btn-sm btn-outline-danger mb-2"
-                        href="{% url 'main:answer_delete' answer.id %}">삭제</a>
-                </div>
-            {% endif %}
-            <!-- 답변 수정 삭제 끝 -->
-        </div>
-    </div>
-    {% endfor %}
-    <!-- 답변 끝 -->
-    <form action="{% url 'main:answer_create' question.id %}" method="post" class="my-3">
-        {% csrf_token %}
-        {% if form.errors %}
-            <div class="alert alert-danger" role="alert">
-            {% for field in form %}
-                {% if field.errors %}
-                    <strong>{{ field.label }}</strong>
-                {{ field.errors }}
-                {% endif %}
-            {% endfor %}
+    <div class="container my-3">
+        <!-- 사용자오류 표시 -->
+        {% if messages %}
+            <div class="alert alert-danger my-3" role="alert">
+                {% for message in messages %}
+                    <strong>{{ message.tags }}</strong>
+                    <ul>
+                        <li>{{ message.message }}</li>
+                    </ul>
+                {% endfor %}
             </div>
         {% endif %}
-        <div class="form-group">
-              <textarea {% if not user.is_authenticated %}disabled{% endif %}
-              name="content" id="content" class="form-control" rows="10"></textarea>
+        <!-- 사용자오류 표시 끝 -->
+        <h2 class="border-bottom py-2">{{ question.subject }}</h2>
+        <div class="card my-3">
+            <div class="card-body">
+                <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
+                <div class="d-flex justify-content-end">
+                    {% if question.modify_date %}
+                        <div class="badge badge-light p-2 text-left mx-2">
+                            <div class="mb-2"> 수정일자</div>
+                            <div>{{ question.modify_date }}</div>
+                        </div>
+                    {% endif %}
+                    <div class="badge badge-light p-2 text-left">
+                        <div class="mb-2"> {{ question.author.username }}</div>
+                        <div>{{ question.create_date }}</div>
+                    </div>
+                </div>
+                {% if request.user == question.author %}
+                    <div class="my-3">
+                        <!-- 수정 삭제 버튼 -->
+                        <a href="{% url 'main:question_modify' question.id %}"
+                           class="btn btn-sm btn-outline-primary">수정</a>
+                        <a href="{% url 'main:question_delete' question.id %}"
+                           class="delete btn btn-sm btn-outline-danger">삭제</a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
-        <input type="submit" value="답변등록" class="btn btn-primary">
-    </form>
-</div>
+        <!-- 답변 -->
+        <h5 class="border-bottom my-3 py-2">{{ question.answer_set.count }}개의 답변이 있습니다.</h5>
+        {% for answer in question.answer_set.all %}
+            <div class="card my-3">
+                <div class="card-body">
+                    <div class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
+                    <div class="d-flex justify-content-end">
+                        {% if answer.modify_date %}
+                            <div class="badge badge-light p-2 text-left mx-2">
+                                <div class="mb-2"> 수정일자</div>
+                                <div>{{ answer.modify_date }}</div>
+                            </div>
+                        {% endif %}
+                        <div class="badge badge-light p-2 text-left">
+                            <div class="mb-2"> {{ answer.author.username }}</div>
+                            <div>{{ answer.create_date }}</div>
+                        </div>
+                    </div>
+                    <!-- 답변 수정 삭제 -->
+                    {% if request.user == answer.author %}
+                        <div class="my-2">
+                            <a class="btn btn-sm btn-outline-primary mb-2"
+                               href="{% url 'main:answer_modify' answer.id %}">수정</a>
+                            <a class="delete btn btn-sm btn-outline-danger mb-2"
+                               href="{% url 'main:answer_delete' answer.id %}">삭제</a>
+                        </div>
+                    {% endif %}
+                    <!-- 답변 수정 삭제 끝 -->
+                </div>
+            </div>
+        {% endfor %}
+        <!-- 답변 끝 -->
+        <form action="{% url 'main:answer_create' question.id %}" method="post" class="my-3">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <strong>{{ field.label }}</strong>
+                            {{ field.errors }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="form-group">
+              <textarea {% if not user.is_authenticated %}disabled{% endif %}
+                        name="content" id="content" class="form-control" rows="10"></textarea>
+            </div>
+            <input type="submit" value="답변등록" class="btn btn-primary">
+        </form>
+    </div>
 {% endblock %}
 
 {% block script %}
-<script type='text/javascript'>
-$(document).ready(function(){
-    $(".delete").on('click', function() {
-        if(confirm("정말로 삭제하시겠습니까?")) {
-            location.href = $(this).data('uri');
-        }else{
-            return false
-        }
-    });
-});
-</script>
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            $(".delete").on('click', function () {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = $(this).data('uri');
+                } else {
+                    return false
+                }
+            });
+        });
+    </script>
 {% endblock %}

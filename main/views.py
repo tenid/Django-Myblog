@@ -63,11 +63,13 @@ class QuestionCreate(View):
             return redirect('main:index')
         else:
             context = {'form': form}
+            print("QuestionCreate by post")
             return render(request, 'main/question_form.html', context)
 
     def get(self, request):
         form = QuestionForm()
         context = {'form': form}
+        print("QuestionCreate by get")
         return render(request, 'main/question_form.html', context)
 
 
@@ -76,20 +78,21 @@ def question_modify(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     if request.user != question.author:
         messages.error(request, '수정권한이 없습니다')
-        return redirect('main:detail', question_id=question_id)
+        return redirect('main:detail', pk=question_id)
 
-    if request.method == "POST":
-        form = Question(request.POST, instance=question)
-        if form.is_vaild():
-            question = form.save(commit=False)
-            question.author = request.user
-            question.modify_date = timezone.now()
-            question.save()
-            return redirect('main:detail', question_id=question_id)
     else:
-        form = QuestionForm(instance=question)
-    context = {'form': form}
-    return render(request, 'main/question_form.html', context)
+        if request.method == "POST":
+            form = QuestionForm(request.POST, instance=question)
+            if form.is_valid():
+                question = form.save(commit=False)
+                question.modify_date = timezone.now()
+                question.save()
+                return redirect('main:detail', pk=question_id)
+        else:
+            form = QuestionForm(instance=question)
+        context = {'form': form}
+        print("QuestionModify by get")
+        return render(request, 'main/question_form.html', context)
 
 
 @login_required(login_url=LOGIN_URL)

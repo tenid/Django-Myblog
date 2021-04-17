@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
         <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-        <form action="{% url 'main:question_create' %}" method="post" class="post-form my-3">
+        <form method="post" class="post-form my-3">
             {% csrf_token %}
             <!-- 오류표시 Start -->
             {% if form.errors %}
