@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect, render, resolve_url
 from django.utils import timezone
 
 from blog.settings import LOGIN_URL
@@ -20,7 +20,8 @@ def answer_create(request, question_id):
             answer.question = question
             answer.author = request.user
             answer.save()
-            return redirect('main:detail', pk=question.id)
+            return redirect('{}#answer_{}'.format(
+                resolve_url('main:detail', pk=question_id), answer.id))
     else:
         form = AnswerForm()
     context = {'question': question, 'form': form}
@@ -42,7 +43,8 @@ def answer_modify(request, answer_id):
                 answer = form.save(commit=False)
                 answer.modify_date = timezone.now()
                 answer.save()
-                return redirect('main:detail', pk=answer.question.id)
+                return redirect('{}#answer_{}'.format(
+                    resolve_url('main:detail', pk=answer.question_id), answer.id))
         else:
             form = AnswerForm(instance=answer)
         context = {'form': form}
