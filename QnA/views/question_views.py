@@ -5,8 +5,8 @@ from django.utils import timezone
 from django.views import View
 
 from blog.settings import LOGIN_URL
-from main.forms import QuestionForm
-from main.models import Question
+from QnA.forms import QuestionForm
+from QnA.models import Question
 
 
 class QuestionCreate(View):
@@ -17,17 +17,17 @@ class QuestionCreate(View):
             question.create_date = timezone.now()
             question.author = request.user
             question.save()
-            return redirect('main:index')
+            return redirect('QnA:index')
         else:
             context = {'form': form}
             print("QuestionCreate by post")
-            return render(request, 'main/question_form.html', context)
+            return render(request, 'QnA/question_form.html', context)
 
     def get(self, request):
         form = QuestionForm()
         context = {'form': form}
         print("QuestionCreate by get")
-        return render(request, 'main/question_form.html', context)
+        return render(request, 'QnA/question_form.html', context)
 
 
 @login_required(login_url=LOGIN_URL)
@@ -36,7 +36,7 @@ def question_modify(request, question_id):
     if request.user != question.author:
         # messages 같이 임의로 발생시킨 오류는 폼 필드와 관련이 없으므로 넌필드 오류에 해당된다
         messages.error(request, '수정권한이 없습니다')
-        return redirect('main:detail', pk=question_id)
+        return redirect('QnA:detail', pk=question_id)
 
     else:
         if request.method == "POST":
@@ -45,12 +45,12 @@ def question_modify(request, question_id):
                 question = form.save(commit=False)
                 question.modify_date = timezone.now()
                 question.save()
-                return redirect('main:detail', pk=question_id)
+                return redirect('QnA:detail', pk=question_id)
         else:
             form = QuestionForm(instance=question)
         context = {'form': form}
         print("QuestionModify by get")
-        return render(request, 'main/question_form.html', context)
+        return render(request, 'QnA/question_form.html', context)
 
 
 @login_required(login_url=LOGIN_URL)
@@ -59,10 +59,10 @@ def question_delete(request, question_id):
 
     if request.user != question.author:
         messages.error(request, '삭제 권한이 없습니다.')
-        return redirect('main:detail', pk=question_id)
+        return redirect('QnA:detail', pk=question_id)
     else:
         question.delete()
-    return redirect('main:index')
+    return redirect('QnA:index')
 
 
 

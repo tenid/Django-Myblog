@@ -4,8 +4,11 @@ secrets.json
 my_settings.py
 
 /__pycache__/
-main/migrations/
-main/__pycache__/
+blog/__pycache__/
+QnA/migrations/
+QnA/__pycache__/
+Post/migrations/
+Post/__pycache__/
 common/migrations/
 common/__pycache__/
 

@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from main import views as mainView
+from Post import views as mainView
 urlpatterns = [
-    path('', mainView.index.as_view(), name='index'),
+    path('', mainView.Index.as_view(), name='index'),
     path('admin/', admin.site.urls),
-    path('main/',include('main.urls')),
-    path('common/',include('common.urls'))
+    path('QnA/', include('QnA.urls')),
+    # 로그인,로그아웃,회원가입
+    path('common/',include('common.urls')),
+    path('post/',include('Post.urls'))
 ]

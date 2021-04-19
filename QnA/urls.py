@@ -3,7 +3,7 @@ from django.urls import path
 from .views import base_views, question_views, answer_views, comment_views, vote_views
 from django.contrib.auth.decorators import login_required
 
-app_name='main'
+app_name='QnA'
 urlpatterns = [
     # base_views.py
     path('', base_views.index.as_view(), name='index'),

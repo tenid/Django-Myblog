@@ -51,8 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main.apps.MainConfig',
+    'QnA.apps.QnAConfig',
     'common.apps.CommonConfig',
+    'Post.apps.PostConfig',
 
 ]
 
@@ -133,10 +134,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-MAIN_STATIC_DIR = os.path.join(BASE_DIR,'main/static')
+QnA_STATIC_DIR = os.path.join(BASE_DIR,'QnA/static')
 STATICFILES_DIRS = [
     STATIC_DIR,
-    MAIN_STATIC_DIR,
+    QnA_STATIC_DIR,
 ]
 
 # Default primary key field type

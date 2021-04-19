@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404, redirect, render, resolve_url
 from django.utils import timezone
 
 from blog.settings import LOGIN_URL
-from main.forms import CommentForm
-from main.models import Question, Comment, Answer
+from QnA.forms import CommentForm
+from QnA.models import Question, Comment, Answer
 
 
 @login_required(login_url=LOGIN_URL)
@@ -20,11 +20,11 @@ def comment_create_question(request, question_id):
             comment.question = question
             comment.save()
             return redirect('{}#comment_{}'.format(
-                resolve_url('main:detail', pk=comment.question.id),comment.id))
+                resolve_url('QnA:detail', pk=comment.question.id),comment.id))
     else:
         form = CommentForm()
     context = {'form': form}
-    return render(request, 'main/comment_form.html', context)
+    return render(request, 'QnA/comment_form.html', context)
 
 
 @login_required(login_url=LOGIN_URL)
@@ -33,7 +33,7 @@ def comment_modify_question(request, comment_id):
 
     if request.user != comment.author:
         messages.error(request, '댓글수정권한이 없습니다')
-        return redirect('main:detail', pk=comment.question.id)
+        return redirect('QnA:detail', pk=comment.question.id)
 
     if request.method == "POST":
         form = CommentForm(request.POST, instance=comment)
@@ -43,11 +43,11 @@ def comment_modify_question(request, comment_id):
             comment.modify_date = timezone.now()
             comment.save()
             return redirect('{}#comment_{}'.format(
-                resolve_url('main:detail', pk=comment.question.id), comment.id))
+                resolve_url('QnA:detail', pk=comment.question.id), comment.id))
     else:
         form = CommentForm(instance=comment)
     context = {'form': form}
-    return render(request, 'main/comment_form.html', context)
+    return render(request, 'QnA/comment_form.html', context)
 
 
 @login_required(login_url=LOGIN_URL)
@@ -56,10 +56,10 @@ def comment_delete_question(request, comment_id):
 
     if request.user != comment.author:
         messages.error(request, '댓글삭제권한이 없습니다')
-        return redirect('main:detail', pk=comment.question.id)
+        return redirect('QnA:detail', pk=comment.question.id)
     else:
         comment.delete()
-    return redirect('main:detail', pk=comment.question.id)
+    return redirect('QnA:detail', pk=comment.question.id)
 
 
 @login_required(login_url=LOGIN_URL)
@@ -74,11 +74,11 @@ def comment_create_answer(request, answer_id):
             comment.answer = answer
             comment.save()
             return redirect('{}#comment_{}'.format(
-                resolve_url('main:detail', pk=comment.answer.question.id), comment.id))
+                resolve_url('QnA:detail', pk=comment.answer.question.id), comment.id))
     else:
         form = CommentForm()
     context = {'form': form}
-    return render(request, 'main/comment_form.html', context)
+    return render(request, 'QnA/comment_form.html', context)
 
 
 @login_required(login_url=LOGIN_URL)
@@ -86,7 +86,7 @@ def comment_modify_answer(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     if request.user != comment.author:
         messages.error(request, '댓글수정권한이 없습니다')
-        return redirect('main:detail', pk=comment.answer.question.id)
+        return redirect('QnA:detail', pk=comment.answer.question.id)
 
     if request.method == "POST":
         form = CommentForm(request.POST, instance=comment)
@@ -96,11 +96,11 @@ def comment_modify_answer(request, comment_id):
             comment.modify_date = timezone.now()
             comment.save()
             return redirect('{}#comment_{}'.format(
-                resolve_url('main:detail', pk=comment.answer.question.id), comment.id))
+                resolve_url('QnA:detail', pk=comment.answer.question.id), comment.id))
     else:
         form = CommentForm(instance=comment)
     context = {'form': form}
-    return render(request, 'main/comment_form.html', context)
+    return render(request, 'QnA/comment_form.html', context)
 
 
 @login_required(login_url=LOGIN_URL)
@@ -108,7 +108,7 @@ def comment_delete_answer(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     if request.user != comment.author:
         messages.error(request, '댓글삭제권한이 없습니다')
-        return redirect('main:detail', pk=comment.answer.question.id)
+        return redirect('QnA:detail', pk=comment.answer.question.id)
     else:
         comment.delete()
-    return redirect('main:detail', pk=comment.answer.question.id)
+    return redirect('QnA:detail', pk=comment.answer.question.id)

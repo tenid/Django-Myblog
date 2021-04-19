@@ -13,7 +13,7 @@ def vote_question(request, question_id):
         messages.error(request, '본인이 작성한 글은 추천할수 없습니다')
     else:
         question.voter.add(request.user)
-    return redirect('main:detail', pk=question.id)
+    return redirect('QnA:detail', pk=question.id)
 
 @login_required(login_url=LOGIN_URL)
 def vote_answer(request, answer_id):
@@ -22,4 +22,4 @@ def vote_answer(request, answer_id):
         messages.error(request, '본인이 작성한 글은 추천할수 없습니다')
     else:
         answer.voter.add(request.user)
-    return redirect('main:detail', pk=answer.question.id)
+    return redirect('QnA:detail', pk=answer.question.id)

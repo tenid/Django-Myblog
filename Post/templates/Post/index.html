@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 {% load custom_filter %}
 {% block page_title %} {{ page_title }} {% endblock %}
+{% block category %}
+    {% if category_list %}
+        {% for category in category_list %}
+            <a class="btn" href="{% url 'post:category-detail' category.ca_name %}" role="button">{{ category.ca_name }}</a>
+                <div class="dropdown-divider"></div>
+        {% endfor %}
+
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <div class="container my=3">
         <table class="table">
@@ -13,24 +23,22 @@
             </tr>
             </thead>
             <tbody>
-            {% if page_obj %}
-                {% for question in page_obj %}
+            {% if post_list %}
+                {% for post in post_list %}
                     <tr class="text-center">
                         <!-- 번호 = 전체 건수 - 시작인덱스 - 현재인덱스 +1 -->
-                        <td>{{ paginator.count | sub:page_obj.start_index|sub:forloop.counter0|add:1 }}</td>
+                        <td>{{ forloop.counter}}</td>
                         <td class="text-left">
-                            <a href="{% url 'main:detail' question.id %}">{{ question.subject }}</a>
-                            {% if question.answer_set.count > 0 %}
-                                <span class="text-danger small ml-2">{{ question.answer_set.count }} </span>
-                            {% endif %}
+                            <a href="#">{{ post.post_title }}</a>
+
                         </td>
-                        <td>{{ question.author.username }}</td>
-                        <td>{{ question.create_date }}</td>
+                        <td>{{ post.author.username }}</td>
+                        <td>{{ post.create_date }}</td>
                     </tr>
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="3">질문이 없습니다.</td>
+                    <td colspan="3">게시글이 없습니다.</td>
                 </tr>
             {% endif %}
             </tbody>
@@ -73,6 +81,6 @@
                 </li>
             {% endif %}
         </ul>
-        <a href="{% url 'main:question_create' %}" class="btn btn-primary">질문 등록</a>
+        <a href="#" class="btn btn-primary">게시글 등록</a>
     </div>
 {% endblock %} #}

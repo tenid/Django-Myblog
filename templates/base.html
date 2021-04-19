@@ -31,11 +31,13 @@
                     data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">카테고리
             </button>
             <div class="collapse text-center" id="collapseExample">
-                <a class="btn" href="#" role="button">Django</a>
+                <a class="btn" href="{% url 'post:index' %}" role="button">전체글보기</a>
                 <div class="dropdown-divider"></div>
-                <a class="btn" href="#" role="button">질문과 답변</a>
+                {% block category %}
+
+                {% endblock %}
             </div>
-            <a href="#" class="list-group-item list-group-item-action bg-light">최근 게시물</a>
+            <a href="{% url 'QnA:index' %}" class="list-group-item list-group-item-action bg-light">QnA</a>
             <a href="#" class="list-group-item list-group-item-action bg-light">정보</a>
         </div>
     </div>
@@ -57,7 +59,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'main:index' %}">Home <span
+                        <a class="nav-link" href="{% url 'index' %}">Home <span
                                 class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
