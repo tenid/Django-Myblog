@@ -5,13 +5,23 @@
     {% if category_list %}
         {% for category in category_list %}
             <a class="btn" href="#" role="button">{{ category.ca_name }}</a>
-                <div class="dropdown-divider"></div>
+            <div class="dropdown-divider"></div>
         {% endfor %}
 
     {% endif %}
 {% endblock %}
 {% block content %}
     <div class="container my=3">
+        <!-- 검색 창-->
+        <div class="row justify-content-end my-3">
+            <div class="col-4 input-group">
+                <input type="text" class="form-control kw" placeholder="QnA내에서 검색" value="{{ kw|default_if_none:'' }}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+                </div>
+            </div>
+        </div>
+        <!-- 검색 창-->
         <table class="table">
             <thead>
             <tr class="text-center thead-dark">
@@ -44,12 +54,12 @@
             {% endif %}
             </tbody>
         </table>
-        <!-- page nav -->
+        <!-- page nav 시작 -->
         <ul class="pagination justify-content-center">
             <!-- 이전 페이지-->
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">이전</a>
+                    <a class="page-link" data-page="{{ page_obj.previous_page_number }}" href="#">이전</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -62,11 +72,11 @@
                 {% if page_number >= page_obj.number|add:-5 and page_number <= page_obj.number|add:5 %}
                     {% if page_number == page_obj.number %}
                         <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                            <a class="page-link" data-page="{{ page_number }}" href="#">{{ page_number }}</a>
                         </li>
                     {% else %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                            <a class="page-link" data-page="{{ page_number }}" href="#">{{ page_number }}</a>
                         </li>
                     {% endif %}
                 {% endif %}
@@ -74,7 +84,7 @@
             <!-- 다음 페이지 -->
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">다음</a>
+                    <a class="page-link" data-page="{{ page_obj.next_page_number }}" href="#">다음</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -82,6 +92,35 @@
                 </li>
             {% endif %}
         </ul>
+        <!-- page nav 끝 -->
         <a href="{% url 'QnA:question_create' %}" class="btn btn-primary">질문 등록</a>
+        <!-- 검색 폼 처리 시작 -->
+        <form id="searchForm" method="get" action="{% url 'QnA:index' %}">
+            <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+            <input type="hidden" id="page" name="page" value="{{ page }}">
+        </form>
+         <!-- 검색 폼 처리 끝 -->
     </div>
 {% endblock %} #}
+
+{% block script %}
+<script type='text/javascript'>
+$(document).ready(function(){
+    // 페이지 번호를 클릭 시
+    $(".page-link").on('click', function() {
+        //  form 안에 있는 page id를 가진 input 태그에 데이터 삽입
+        //  this : 페이지 링크가 걸려 있는 버튼 , $(this).data("page"): this 가 가진 data-page 값
+        $("#page").val($(this).data("page"));
+        $("#searchForm").submit();
+    });
+    // 검색창 버튼을 클릭 시
+    $("#btn_search").on('click', function() {
+        //  #kw: form 의 id = kw 인 input  .kw: 검색 텍스트
+        // 검색 테스트를 form 안에 input(id='kw') value 에 대입
+        $("#kw").val($(".kw").val());
+        $("#page").val(1);  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+        $("#searchForm").submit();
+    });
+});
+</script>
+{% endblock %}

@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 app_name='QnA'
 urlpatterns = [
     # base_views.py
-    path('', base_views.index.as_view(), name='index'),
+    path('', base_views.Index.as_view(), name='index'),
     path('<int:pk>/', base_views.QuestionDetail.as_view(), name='detail'),
 
     # question_views.py
