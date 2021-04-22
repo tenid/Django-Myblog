@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 from Post.models import Category
-from QnA.models import Question
+from QnA.models import Question, HitCount
 
 # Django model ORM로 Where절에 or문을 사용할 경우, 총 갯수 파악
 from django.db.models import Q, Count
@@ -55,7 +55,33 @@ class QuestionDetail(DetailView):
     template_name = 'QnA/question_detail.html'
     context_object_name = 'question'
 
+    # 사용자 ip 주소 식별
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def update_hitcount(self, ip, question):
+        try:
+            hits = HitCount.objects.get(ip=ip, question=question)
+        except Exception as e:
+            # 처음 질문을 조회한 경우
+            print(e)
+            hits = HitCount(ip=ip, question=question)
+            question.hit_count = question.hit_count +1
+            question.save()
+            hits.save()
+        else:
+            # 조회한 기록이 있을 경우
+            print(str(ip) + ' has already hit\n\n')
+
     def get_context_data(self, **kwargs):
         context = super(QuestionDetail, self).get_context_data()
         context['page_title'] = '질문내용 보기'
+        self.update_hitcount(self.get_client_ip(self.request),self.get_object())
         return context
+
+

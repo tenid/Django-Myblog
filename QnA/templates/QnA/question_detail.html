@@ -17,6 +17,7 @@
         {% endif %}
         <!-- 사용자오류 표시 끝 -->
         <h2 class="border-bottom py-2">{{ question.subject }}</h2>
+        <h10> 조회수: {{ question.hit_count |default_if_none:0 }}</h10>
         <div class="row my-3">
             <!-- 추천 시작 -->
             <div class="col-1">
