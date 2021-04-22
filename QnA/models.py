@@ -49,7 +49,7 @@ class Comment(models.Model):
 class HitCount(models.Model):
     ip = models.CharField(max_length=15, default=None, null=True)
     question = models.ForeignKey(Question,default=None,null=True, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=now(), null=True, blank=True)
+    date = models.DateTimeField(null=True, blank=True)
 
 
 
