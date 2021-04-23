@@ -22,5 +22,9 @@ urlpatterns = [
     path('QnA/', include('QnA.urls')),
     # 로그인,로그아웃,회원가입
     path('common/',include('common.urls')),
-    path('post/',include('Post.urls'))
+    path('post/', include('Post.urls')),
+
+    # martor
+    path('martor/', include('martor.urls'))
+
 ]

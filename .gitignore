@@ -3,6 +3,7 @@
 secrets.json
 my_settings.py
 
+/venv/
 /__pycache__/
 blog/__pycache__/
 QnA/migrations/
