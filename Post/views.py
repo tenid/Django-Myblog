@@ -3,11 +3,8 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.urls import reverse
-from django.utils import timezone
-from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 
-from Post.forms import PostForm
 from Post.models import Post, Category
 
 
@@ -29,7 +26,7 @@ class Index(ListView):
         return self.model.objects.order_by('-created_at')
 
 
-class CategoryList(ListView):
+class CategoryDetail(ListView):
     model = Post
 
     def get(self, request, category_name):
@@ -39,29 +36,9 @@ class CategoryList(ListView):
             'category_list': category_list,
             'post_list': post_list
         }
-        return render(request, 'Post/category.html', context)
+        return render(request,'Post/test.html',context)
 
 
-class PostDetail(DetailView):
-    model = Post
-    template_name = 'Post/post_detail.html'
-    context_object_name = 'post'
 
 
-class PostCreate(View):
-    def post(self, request):
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.created_at = timezone.now()
-            post.author = request.user
-            post.save()
-            return redirect('post:index')
-        else:
-            context = {'form': form}
-            return render(request, 'Post/post_form.html.html', context)
 
-    def get(self, request):
-        form = PostForm()
-        context = {'form': form}
-        return render(request, 'Post/post_form.html', context)
