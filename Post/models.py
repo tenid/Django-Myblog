@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from martor.models import MartorField
 
 
 # 카테고리 테이블(카테고리명)
@@ -20,6 +21,7 @@ class Category(models.Model):
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     post_title = models.CharField(max_length=45)
+    content = MartorField()
     created_at = models.DateTimeField()
     modified_at = models.DateTimeField(null=True,blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)

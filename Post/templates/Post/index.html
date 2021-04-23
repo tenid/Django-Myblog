@@ -4,7 +4,7 @@
 {% block category %}
     {% if category_list %}
         {% for category in category_list %}
-            <a class="btn" href="{% url 'post:category-detail' category.ca_name %}" role="button">{{ category.ca_name }}</a>
+            <a class="btn" href="{% url 'post:category-list' category.ca_name %}" role="button">{{ category.ca_name }}</a>
                 <div class="dropdown-divider"></div>
         {% endfor %}
 
@@ -29,7 +29,7 @@
                         <!-- 번호 = 전체 건수 - 시작인덱스 - 현재인덱스 +1 -->
                         <td>{{ forloop.counter}}</td>
                         <td class="text-left">
-                            <a href="#">{{ post.post_title }}</a>
+                            <a href="{% url 'post:post-detail' post.id %}">{{ post.post_title }}</a>
 
                         </td>
                         <td>{{ post.author.username }}</td>
@@ -81,6 +81,6 @@
                 </li>
             {% endif %}
         </ul>
-        <a href="#" class="btn btn-primary">게시글 등록</a>
+        <a href="{% url 'post:post-create' %}" class="btn btn-primary">게시글 등록</a>
     </div>
 {% endblock %} #}
