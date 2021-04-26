@@ -9,7 +9,6 @@ from django.views.generic import ListView, DetailView
 
 from Post.forms import PostForm
 
-
 from Post.models import Post, Category
 
 
@@ -65,11 +64,8 @@ class PostCreate(View):
 
     def get(self, request):
         form = PostForm()
-        context = {'form': form}
+        category_list = Category.objects.order_by('-created_at').all()
+        context = {
+            'form': form,
+            'category_list': category_list}
         return render(request, 'Post/post_form.html', context)
-
-
-
-
-
-
