@@ -7,7 +7,7 @@ from .models import Post
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['post_title','content']
+        fields = ['post_title','category','content']
         widgets = {
             'content': MartorFormField(),
         }

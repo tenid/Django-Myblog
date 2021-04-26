@@ -28,6 +28,9 @@ class Post(models.Model):
     modified_at = models.DateTimeField(null=True,blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
 
+    def __str__(self):
+        return self.post_title
+
     class Meta:
         # 테이블 이름
         db_table = 'post'

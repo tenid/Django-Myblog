@@ -3,44 +3,83 @@
 {% block title %}{{ title }} :: {{ block.super }}{% endblock %}
 
 {% block css %}
-  <link href="{% static 'plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" />
-  <link href="{% static 'plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet" />
-  <link href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" />
+    <link href="{% static 'plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
+    <link href="{% static 'plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
+    <link href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
-  <form class="form" method="post">{% csrf_token %}
-    <div class="form-group">
-      제목:{{ form.post_title }}
-    </div>
-    <div class="form-group">
-      {{ form.content }}
-    </div>
-    <div class="form-group">
-      <button class="btn btn-success">
-        <i class="save icon"></i> 저장하기
-      </button>
-    </div>
-  </form>
+
+    <form class="form" method="post">{% csrf_token %}
+        <div class="form-group">
+            제목:{{ form.post_title }}
+        </div>
+        <div class="form-group">
+            카테고리:{{ form.category }}
+        </div>
+        <div class="form-group">
+            입력모드 선택:
+            <select class="form-control input-mode">
+                <option value="Normal" {% if so == 'Normal' %} selected  {% endif %}>Normal</option>
+                <option value="Markdown" {% if so == 'Markdown' %}selected {% endif %}>Markdown</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="content">내용</label>
+            <div class="normal-text">
+                <textarea class="form-control" name="content"
+                          id="content" rows="10"></textarea>
+            </div>
+            <div class="markdown-text" style="display: none">
+                {{ form.content }}
+            </div>
+        </div>
+        <div class="form-group">
+            <button id="save-button" type="submit" class="btn btn-primary">저장하기</button>
+        </div>
+
+    </form>
 {% endblock %}
 
 {% block script %}
-  <script type="text/javascript" src="{% static 'plugins/js/ace.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/mode-markdown.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/ext-language_tools.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/theme-github.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/typo.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/spellcheck.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/resizable.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/emojis.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'martor/js/martor.bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/js/ace.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/js/mode-markdown.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/js/ext-language_tools.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/js/theme-github.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/js/typo.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/js/spellcheck.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/js/resizable.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/js/emojis.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'martor/js/martor.bootstrap.min.js' %}"></script>
 
-  <script>
-    $('form [name="title"]').attr({
-      'class': 'form-control',
-      'placeholder': 'Post Title'
-    });
-  </script>
+    <script>
+        // 입력 모드 변경
+        $(".input-mode").on('change', function () {
+            if ($(this).val() == 'Markdown') {
+                $('.markdown-text').show();
+                $('.normal-text').hide();
+            } else {
+                $('.markdown-text').hide();
+                $('.normal-text').show();
+
+            }
+        });
+        // 저장 버튼 누를 시 martor 필드로 만든 textarea에 require 옵션 때문에 에러가 생김
+        // 일반 모드일 경우 form.content로 렌더링 한 필드(markdown-text)를 제거 하고 저장
+        // 마크다운 모드 일 경우 직접 렌더링한 textarea 필드를 제거하고 저장
+        $("#save-button").on('click', function () {
+            if ($('.markdown-text').css('display') == 'none') {
+                $('.markdown-text').remove();
+            } else {
+                $('.normal-text').remove();
+            }
+        });
+
+    </script>
 {% endblock %}
- No newline at end of file
+No newline at end of file
+
+

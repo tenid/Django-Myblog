@@ -61,7 +61,7 @@ class PostCreate(View):
             return redirect('post:index')
         else:
             context = {'form': form}
-            return render(request, 'Post/post_form.html.html', context)
+            return render(request, 'Post/post_form.html', context)
 
     def get(self, request):
         form = PostForm()
