@@ -153,7 +153,7 @@ MARTOR_THEME = 'bootstrap'
 # Input: string boolean, `true/false`
 MARTOR_ENABLE_CONFIGS = {
     'emoji': 'true',  # to enable/disable emoji icons.
-    'imgur': 'false',  # to enable/disable imgur/custom uploader.
+    'imgur': 'true',  # to enable/disable imgur/custom uploader.
     'mention': 'true',  # to enable/disable mention
     'jquery': 'true',  # to include/revoke jquery (require for admin default django)
     'living': 'false',  # to enable/disable live updates in preview
