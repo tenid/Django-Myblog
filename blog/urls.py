@@ -13,9 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from Post import views as mainView
+from Post.views import markdown_uploader
+from django.conf import settings
+
 urlpatterns = [
     path('', mainView.Index.as_view(), name='index'),
     path('admin/', admin.site.urls),
@@ -25,6 +29,7 @@ urlpatterns = [
     path('post/', include('Post.urls')),
 
     # martor
-    path('martor/', include('martor.urls'))
+    path('martor/', include('martor.urls')),
+    path('api/uploader/', markdown_uploader, name='markdown_uploader_page'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

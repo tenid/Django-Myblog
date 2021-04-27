@@ -30,7 +30,9 @@
             <div class="col-11">
                 <div class="card">
                 <div class="card-body">
-                    <div class="card-text">{{ post.content | safe_markdown }}</div>
+                    <div class="card-text">
+                        {{ post.content | safe_markdown }}
+                    </div>
                     <div class="d-flex justify-content-end">
                         {% if post.modify_at %}
                             <div class="badge badge-light p-2 text-left mx-2">

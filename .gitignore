@@ -1,9 +1,10 @@
-*.cpython-36.pyc
-
+*.pyc
 secrets.json
 my_settings.py
 
+/.idea/
 /venv/
+/media/
 /__pycache__/
 blog/__pycache__/
 QnA/migrations/

@@ -19,3 +19,10 @@ code {
     border-radius: 3px;
     padding: 1em;
 }
+
+/*게시판 이미지 크기 조정*/
+p > img{
+    max-width: 100%;
+    height: auto;
+    display: block;
+}

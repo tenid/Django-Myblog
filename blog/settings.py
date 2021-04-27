@@ -9,15 +9,16 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-import json,os
+import json, os
 import my_settings
 from pathlib import Path
+import time
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+ROOT_DIR = os.path.dirname(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -34,13 +35,13 @@ def get_secret(setting, secrets=secrets):
         error_msg = "Set the {} environment variable".format(setting)
         raise ImproperlyConfigured(error_msg)
 
+
 SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -89,12 +90,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blog.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = my_settings.DATABASES
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -114,7 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -128,14 +125,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-QnA_STATIC_DIR = os.path.join(BASE_DIR,'QnA/static')
+QnA_STATIC_DIR = os.path.join(BASE_DIR, 'QnA/static')
 STATICFILES_DIRS = [
     STATIC_DIR,
     QnA_STATIC_DIR,
@@ -150,20 +146,19 @@ LOGIN_URL = 'common:login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-
 # Choices are: "semantic", "bootstrap"
 MARTOR_THEME = 'bootstrap'
 
 # Global martor settings
 # Input: string boolean, `true/false`
 MARTOR_ENABLE_CONFIGS = {
-    'emoji': 'true',        # to enable/disable emoji icons.
-    'imgur': 'false',        # to enable/disable imgur/custom uploader.
-    'mention': 'false',     # to enable/disable mention
-    'jquery': 'true',       # to include/revoke jquery (require for admin default django)
-    'living': 'false',      # to enable/disable live updates in preview
+    'emoji': 'true',  # to enable/disable emoji icons.
+    'imgur': 'false',  # to enable/disable imgur/custom uploader.
+    'mention': 'true',  # to enable/disable mention
+    'jquery': 'true',  # to include/revoke jquery (require for admin default django)
+    'living': 'false',  # to enable/disable live updates in preview
     'spellcheck': 'false',  # to enable/disable spellcheck in form textareas
-    'hljs': 'true',         # to enable/disable hljs highlighting in preview
+    'hljs': 'true',  # to enable/disable hljs highlighting in preview
 }
 
 # To show the toolbar buttons
@@ -178,12 +173,12 @@ MARTOR_TOOLBAR_BUTTONS = [
 MARTOR_ENABLE_LABEL = False
 
 # Imgur API Keys
-# MARTOR_IMGUR_CLIENT_ID = 'cf308b85c1faef5'
-# MARTOR_IMGUR_API_KEY   = 'dfb1d81a2aa0be8d12cd373e19ee61b02dfc02d4'
+# MARTOR_IMGUR_CLIENT_ID = 'your_id'
+# MARTOR_IMGUR_API_KEY = 'your_api_key'
 
 # Markdownify
-MARTOR_MARKDOWNIFY_FUNCTION = 'martor.utils.markdownify' # default
-MARTOR_MARKDOWNIFY_URL = '/martor/markdownify/' # default
+MARTOR_MARKDOWNIFY_FUNCTION = 'martor.utils.markdownify'  # default
+MARTOR_MARKDOWNIFY_URL = '/martor/markdownify/'  # default
 
 # Markdown extensions (default)
 MARTOR_MARKDOWN_EXTENSIONS = [
@@ -194,10 +189,10 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 
     # Custom markdown extensions.
     'martor.extensions.urlize',
-    'martor.extensions.del_ins',      # ~~strikethrough~~ and ++underscores++
-    'martor.extensions.mention',      # to parse markdown mention
-    'martor.extensions.emoji',        # to parse markdown emoji
-    'martor.extensions.mdx_video',    # to parse embed/iframe video
+    'martor.extensions.del_ins',  # ~~strikethrough~~ and ++underscores++
+    'martor.extensions.mention',  # to parse markdown mention
+    'martor.extensions.emoji',  # to parse markdown emoji
+    'martor.extensions.mdx_video',  # to parse embed/iframe video
     'martor.extensions.escape_html',  # to handle the XSS vulnerabilities
 ]
 
@@ -205,18 +200,35 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 MARTOR_MARKDOWN_EXTENSION_CONFIGS = {}
 
 # Markdown urls
-MARTOR_UPLOAD_URL = '/martor/uploader/' # default
-MARTOR_SEARCH_USERS_URL = '/martor/search-user/' # default
+MARTOR_UPLOAD_URL = '/martor/uploader/'  # default
+MARTOR_SEARCH_USERS_URL = '/martor/search-user/'  # default
 
 # Markdown Extensions
 # MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://www.webfx.com/tools/emoji-cheat-sheet/graphics/emojis/'     # from webfx
-MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://github.githubassets.com/images/icons/emoji/'                  # default from github
-MARTOR_MARKDOWN_BASE_MENTION_URL = 'https://python.web.id/author/'                                      # please change this to your domain
+MARTOR_MARKDOWN_BASE_EMOJI_URL = 'https://github.githubassets.com/images/icons/emoji/'  # default from github
+MARTOR_MARKDOWN_BASE_MENTION_URL = 'https://python.web.id/author/'  # please change this to your domain
 
 # If you need to use your own themed "bootstrap" or "semantic ui" dependency
 # replace the values with the file in your static files dir
-MARTOR_ALTERNATIVE_JS_FILE_THEME = "semantic-themed/semantic.min.js"   # default None
-MARTOR_ALTERNATIVE_CSS_FILE_THEME = "semantic-themed/semantic.min.css" # default None
-MARTOR_ALTERNATIVE_JQUERY_JS_FILE = "jquery/dist/jquery.min.js"        # default None
+MARTOR_ALTERNATIVE_JS_FILE_THEME = "semantic-themed/semantic.min.js"  # default None
+MARTOR_ALTERNATIVE_CSS_FILE_THEME = "semantic-themed/semantic.min.css"  # default None
+MARTOR_ALTERNATIVE_JQUERY_JS_FILE = "jquery/dist/jquery.min.js"  # default None
 
 CSRF_COOKIE_HTTPONLY = False
+
+MARTOR_UPLOAD_PATH = 'images/uploads/{}'.format(time.strftime("%Y/%m/%d/"))
+MARTOR_UPLOAD_URL = '/api/uploader/'
+
+# Maximum Upload Image
+# 2.5MB - 2621440
+# 5MB - 5242880
+# 10MB - 10485760
+# 20MB - 20971520
+# 50MB - 5242880
+# 100MB 104857600
+# 250MB - 214958080
+# 500MB - 429916160
+MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
