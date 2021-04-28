@@ -1,17 +1,14 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, DetailView
 
 from Post.forms import PostForm
-
 from Post.models import Post, Category
 
-
-import os
-import json
-import uuid
+import os, json, uuid
+from blog.settings import LOGIN_URL
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -19,8 +16,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-
 from martor.utils import LazyEncoder
+
 
 # 전체 게시글 보기
 class Index(ListView):
@@ -79,6 +76,41 @@ class PostCreate(View):
             'form': form,
             'category_list': category_list}
         return render(request, 'Post/post_form.html', context)
+
+
+@login_required(login_url=LOGIN_URL)
+def post_delete(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+
+    if request.user != post.author:
+        messages.error(request, '삭제 권한이 없습니다.')
+        return redirect('QnA:detail', pk=post_id)
+    else:
+        post.delete()
+    return redirect('post:index')
+
+
+@login_required(login_url=LOGIN_URL)
+def post_modify(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+
+    if request.user != post.author:
+        # messages 같이 임의로 발생시킨 오류는 폼 필드와 관련이 없으므로 넌필드 오류에 해당된다
+        messages.error(request, '수정권한이 없습니다')
+        return redirect('post:post-detail', pk=post_id)
+
+    else:
+        if request.method == "POST":
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.modified_at = timezone.now()
+                post.save()
+                return redirect('post:post-detail', pk=post_id)
+        else:
+            form = PostForm(instance=post)
+        context = {'form': form}
+        return render(request, 'post/post_form.html', context)
 
 
 def markdown_uploader(request):
