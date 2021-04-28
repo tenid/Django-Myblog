@@ -23,18 +23,18 @@ from martor.utils import LazyEncoder
 class Index(ListView):
     model = Post
     template_name = 'Post/index.html'
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super(Index, self).get_context_data()
         category_list = Category.objects.order_by('-created_at').all()
-        post_list = Post.objects.all()
         context['category_list'] = category_list
-        context['post_list'] = post_list
         context['page_title'] = '전체 글보기'
         return context
 
     def get_queryset(self):
-        return self.model.objects.order_by('-created_at')
+        post_list = Post.objects.order_by('-created_at')
+        return post_list
 
 
 class CategoryList(ListView):

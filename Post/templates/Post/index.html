@@ -26,7 +26,7 @@
                 {% for post in post_list %}
                     <tr class="text-center">
                         <!-- 번호 = 전체 건수 - 시작인덱스 - 현재인덱스 +1 -->
-                        <td>{{ forloop.counter}}</td>
+                        <td>{{ paginator.count | sub:page_obj.start_index|sub:forloop.counter0|add:1 }}</td>
                         <td class="text-left">
                             <a href="{% url 'post:post-detail' post.id %}">{{ post.post_title }}</a>
                         </td>
