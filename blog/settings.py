@@ -238,3 +238,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # 클릭 재킹 방지 django 3.x부터 summernote를 사용하려면 설정 필요
 # SAMEORIGIN: "이 홈페이지는 동일한 도메인의 페이지 내에서만 표시할 수 있음"
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+SUMMERNOTE_CONFIG = {
+    'attachment_filesize_limit': 10485760
+}
