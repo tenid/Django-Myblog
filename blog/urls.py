@@ -32,4 +32,7 @@ urlpatterns = [
     path('martor/', include('martor.urls')),
     path('api/uploader/', markdown_uploader, name='markdown_uploader_page'),
 
+    # summernote
+    path('summernote/', include('django_summernote.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

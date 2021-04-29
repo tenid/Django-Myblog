@@ -1,4 +1,5 @@
 from django import forms
+from django_summernote.widgets import SummernoteWidget
 from .models import *
 
 
@@ -17,6 +18,9 @@ class QuestionForm(forms.ModelForm):
         labels = {
             'subject': '제목',
             'content': '내용',
+        }
+        widgets = {
+            'content': SummernoteWidget()
         }
 
 

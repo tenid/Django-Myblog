@@ -4,18 +4,15 @@
 }
 
 
-
-pre>code {
+/* 게시판 코드 출력 배경 */
+pre{
     background-color: #e9ecef;
     display: block;
     padding: 1em;
     -webkit-text-size-adjust: none;
     overflow-x: auto;
     white-space: pre-wrap;
-}
-
-code {
-    background-color: rgba(0, 0, 0, .05);
+     background-color: rgba(0, 0, 0, .05);
     border-radius: 3px;
     padding: 1em;
 }
